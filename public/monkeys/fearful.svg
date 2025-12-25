@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFE4B5"/>
+      <stop offset="100%" style="stop-color:#DEB887"/>
+    </linearGradient>
+  </defs>
+  <circle cx="100" cy="100" r="95" fill="url(#bg)"/>
+  <!-- Face -->
+  <ellipse cx="100" cy="110" rx="60" ry="55" fill="#8B4513"/>
+  <ellipse cx="100" cy="115" rx="40" ry="35" fill="#D2691E"/>
+  <!-- Ears -->
+  <circle cx="35" cy="90" r="25" fill="#8B4513"/>
+  <circle cx="35" cy="90" r="15" fill="#DEB887"/>
+  <circle cx="165" cy="90" r="25" fill="#8B4513"/>
+  <circle cx="165" cy="90" r="15" fill="#DEB887"/>
+  <!-- Scared eyebrows raised -->
+  <path d="M 60 85 Q 75 75 90 85" stroke="#2C1810" stroke-width="3" fill="none"/>
+  <path d="M 110 85 Q 125 75 140 85" stroke="#2C1810" stroke-width="3" fill="none"/>
+  <!-- Scared wide eyes -->
+  <circle cx="75" cy="100" r="14" fill="white"/>
+  <circle cx="75" cy="102" r="7" fill="#2C1810"/>
+  <circle cx="125" cy="100" r="14" fill="white"/>
+  <circle cx="125" cy="102" r="7" fill="#2C1810"/>
+  <!-- Scared grimace mouth -->
+  <path d="M 80 140 Q 85 145 90 140 Q 95 145 100 140 Q 105 145 110 140 Q 115 145 120 140" stroke="#2C1810" stroke-width="3" fill="none"/>
+  <!-- Hands up near face -->
+  <ellipse cx="40" cy="140" rx="15" ry="10" fill="#8B4513"/>
+  <ellipse cx="160" cy="140" rx="15" ry="10" fill="#8B4513"/>
+</svg>
