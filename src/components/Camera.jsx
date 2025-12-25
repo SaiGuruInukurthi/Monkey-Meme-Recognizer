@@ -14,6 +14,7 @@ function Camera({ onCapture, onStop }) {
     const [error, setError] = useState(null);
     const [currentExpression, setCurrentExpression] = useState('neutral');
     const [modelsLoaded, setModelsLoaded] = useState(false);
+    const [cameraReady, setCameraReady] = useState(false);
 
     // Load face-api models
     useEffect(() => {
@@ -57,9 +58,6 @@ function Camera({ onCapture, onStop }) {
 
                 if (videoRef.current) {
                     videoRef.current.srcObject = stream;
-                    await videoRef.current.play();
-                    setIsLoading(false);
-                    startDetection();
                 }
             } catch (err) {
                 console.error('Camera error:', err);
@@ -83,6 +81,23 @@ function Camera({ onCapture, onStop }) {
             }
         };
     }, [modelsLoaded]);
+
+    // Handle video metadata loaded - video is ready to play
+    const handleVideoReady = useCallback(() => {
+        if (videoRef.current) {
+            videoRef.current.play()
+                .then(() => {
+                    setCameraReady(true);
+                    setIsLoading(false);
+                    startDetection();
+                })
+                .catch(err => {
+                    console.error('Video play error:', err);
+                    setError('Could not start video playback.');
+                    setIsLoading(false);
+                });
+        }
+    }, []);
 
     // Face detection loop
     const startDetection = useCallback(() => {
@@ -161,73 +176,75 @@ function Camera({ onCapture, onStop }) {
         );
     }
 
-    // Loading state
-    if (isLoading) {
-        return (
-            <div className="card text-center fade-in max-w-md w-full">
-                <div className="spinner mx-auto mb-4"></div>
-                <p className="text-gray-600">{loadingMessage}</p>
-            </div>
-        );
-    }
-
     return (
         <div className="card fade-in max-w-2xl w-full">
-            <div className="flex flex-col md:flex-row gap-6">
-                {/* Video feed */}
-                <div className="flex-1">
-                    <div className="video-container">
-                        <video
-                            ref={videoRef}
-                            className="w-full"
-                            style={{ transform: 'scaleX(-1)' }}
-                            playsInline
-                            muted
-                        />
+            {/* Loading overlay */}
+            {isLoading && (
+                <div className="text-center py-8">
+                    <div className="spinner mx-auto mb-4"></div>
+                    <p className="text-gray-600">{loadingMessage}</p>
+                </div>
+            )}
+
+            {/* Main content - hidden while loading */}
+            <div className={isLoading ? 'hidden' : ''}>
+                <div className="flex flex-col md:flex-row gap-6">
+                    {/* Video feed */}
+                    <div className="flex-1">
+                        <div className="video-container">
+                            <video
+                                ref={videoRef}
+                                className="w-full"
+                                style={{ transform: 'scaleX(-1)' }}
+                                playsInline
+                                muted
+                                onLoadedMetadata={handleVideoReady}
+                            />
+                        </div>
+                        <canvas ref={canvasRef} className="hidden" />
                     </div>
-                    <canvas ref={canvasRef} className="hidden" />
+
+                    {/* Live monkey preview */}
+                    <div className="flex-shrink-0 flex flex-col items-center justify-center">
+                        <div className="expression-badge mb-4">
+                            {monkey.label} {monkey.emoji}
+                        </div>
+
+                        <div className="monkey-preview bg-orange-50 rounded-2xl p-4 w-48 h-48 flex items-center justify-center">
+                            <img
+                                src={monkey.image}
+                                alt={monkey.description}
+                                className="max-w-full max-h-full object-contain rounded-lg"
+                                onError={(e) => {
+                                    e.target.style.display = 'none';
+                                    e.target.parentElement.innerHTML = `<span class="text-6xl">${monkey.emoji}</span>`;
+                                }}
+                            />
+                        </div>
+
+                        <p className="text-sm text-gray-500 mt-2 text-center">
+                            {monkey.description}
+                        </p>
+                    </div>
                 </div>
 
-                {/* Live monkey preview */}
-                <div className="flex-shrink-0 flex flex-col items-center justify-center">
-                    <div className="expression-badge mb-4">
-                        {monkey.label} {monkey.emoji}
-                    </div>
-
-                    <div className="monkey-preview bg-orange-50 rounded-2xl p-4 w-48 h-48 flex items-center justify-center">
-                        <img
-                            src={monkey.image}
-                            alt={monkey.description}
-                            className="max-w-full max-h-full object-contain rounded-lg"
-                            onError={(e) => {
-                                e.target.style.display = 'none';
-                                e.target.parentElement.innerHTML = `<span class="text-6xl">${monkey.emoji}</span>`;
-                            }}
-                        />
-                    </div>
-
-                    <p className="text-sm text-gray-500 mt-2 text-center">
-                        {monkey.description}
-                    </p>
+                {/* Controls */}
+                <div className="flex gap-4 justify-center mt-6">
+                    <button
+                        onClick={handleCapture}
+                        className="btn-primary"
+                        id="capture-btn"
+                    >
+                        📸 Capture
+                    </button>
+                    <button
+                        onClick={handleStop}
+                        className="btn-secondary"
+                        id="stop-btn"
+                    >
+                        ⬅️ Stop
+                    </button>
                 </div>
-            </div>
-
-            {/* Controls */}
-            <div className="flex gap-4 justify-center mt-6">
-                <button
-                    onClick={handleCapture}
-                    className="btn-primary"
-                    id="capture-btn"
-                >
-                    📸 Capture
-                </button>
-                <button
-                    onClick={handleStop}
-                    className="btn-secondary"
-                    id="stop-btn"
-                >
-                    ⬅️ Stop
-                </button>
             </div>
         </div>
     );
@@ -239,3 +256,4 @@ Camera.propTypes = {
 };
 
 export default Camera;
+

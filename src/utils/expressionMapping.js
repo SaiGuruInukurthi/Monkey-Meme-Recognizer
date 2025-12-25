@@ -1,43 +1,43 @@
 // Expression to monkey image mapping
 export const expressionMapping = {
     happy: {
-        image: '/monkeys/happy.svg',
+        image: '/monkeys/happy.png',
         emoji: '😄',
         label: 'Happy',
         description: 'Tongue out monkey'
     },
     surprised: {
-        image: '/monkeys/surprised.svg',
+        image: '/monkeys/surprised.png',
         emoji: '😲',
         label: 'Surprised',
         description: 'Wide-eyed monkey'
     },
     neutral: {
-        image: '/monkeys/neutral.svg',
+        image: '/monkeys/neutral.png',
         emoji: '😐',
         label: 'Neutral',
         description: 'Thinking monkey'
     },
     sad: {
-        image: '/monkeys/sad.svg',
+        image: '/monkeys/sad.png',
         emoji: '😢',
         label: 'Sad',
         description: 'Awkward smile monkey'
     },
     angry: {
-        image: '/monkeys/angry.svg',
+        image: '/monkeys/angry.png',
         emoji: '😠',
         label: 'Angry',
         description: 'Shocked monkey'
     },
     fearful: {
-        image: '/monkeys/fearful.svg',
+        image: '/monkeys/fearful.png',
         emoji: '😨',
         label: 'Fearful',
         description: 'Scared hands monkey'
     },
     disgusted: {
-        image: '/monkeys/disgusted.svg',
+        image: '/monkeys/disgusted.png',
         emoji: '🤢',
         label: 'Disgusted',
         description: 'Confused monkey'
